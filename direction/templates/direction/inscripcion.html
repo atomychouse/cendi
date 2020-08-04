@@ -1,0 +1,99 @@
+{% extends 'direction/home.html' %}
+{% block content %} 
+<!-- Navigation -->
+{% include 'direction/menu.html' %}
+    <section class="page-section" id="inscripciones" style="padding: 24vh 0px;width:80%;margin:auto;">
+        <h2 id="show_alumno" class="clicable showelm" data-show="#alumno-form">Datos del alumno
+            Folio: <span class="showfolio"></span></h2>
+        <form id="alumno-form" action="/direccion/inscripciones/alumno/" 
+            method="post" 
+            class="sendajax">
+            <input type="hidden" name="id" value="">
+            {% csrf_token %}
+            <input type="hidden" name="step" value="0">
+            <i class="fab fa-500px"></i>
+            {% for fa in form_alumno %}
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                        <label>{{fa.label}}</label>
+                        {{fa}}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit">Continuar</button>
+        </form>
+    </section>
+
+    <section class="page-section" id="inscripciones" style="padding:10px 0px;width:80%;margin:auto;">
+        <h2  class="clicable showelm" data-show="#tutor-form">Datos del Padre o Tutor</h2>
+        <form id="tutor-form" action="/direccion/inscripciones/alumno/" 
+            method="post" style="width:80%;margin:auto;" 
+            class="sendajax">
+            {% csrf_token %}
+            <input type="hidden" name="step" value="1">
+            <input type="hidden" name="menor" value="">
+            <input type="hidden" name="id" value="">
+            <i class="fab fa-500px"></i>
+            {% for fa in form_tutor %}
+                <div class="control-group">
+                    <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                        <label>{{fa.label}}</label>
+                        {{fa}}
+                        <p class="help-block text-danger"></p>
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit">Continuar</button>
+        </form>
+    </section>
+
+
+    {% endblock %}
+
+
+{% block jscode %}
+    <script type="application/javascript">
+        var folio = null;
+        $(document).ready(function(){
+            $('.showelm').click(function(){
+                var whot = $(this).attr('data-show');
+                $(whot).show('fast');
+            });
+            $('.sendajax').submit(function(e){
+                e.preventDefault();
+                var forma = $(this);
+                $(this).find('.error').remove();
+                $('.error_field').removeClass('error_field');
+                var data = $(this).serializeArray();
+                $.ajax({
+                    url:$(this).attr('action'),
+                    type:$(this).attr('method'),
+                    enctype: 'multipart/form-data',
+                    dataType:'json',
+                    data:data,
+                    success:function(response){
+                        if(response.errors){
+                            $.each(response.errors,function(name_input,arry){
+                                var name = name_input;
+                                //console.debug(forma);
+                                forma.find("[name='"+name+"']").after('<div class="error">'+arry[0].message+'</div>');
+                                forma.find("[name='"+name+"']").addClass('error_field');
+                            });
+                            forma.find('.error_field:first').focus();
+                        }
+                        else
+                        {
+                            folio = response.folio;
+                            $('.showfolio').html(folio);
+                            $('[name="folio"]').val(folio);
+                            forma.find('[name="id"]').val(response.id);
+                            forma.hide('slow');
+                        }
+                    }
+                });
+                
+            });
+        });
+    </script>
+{% endblock %}

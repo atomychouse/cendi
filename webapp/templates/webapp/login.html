@@ -1,0 +1,28 @@
+
+<section>
+    <h4>Padres de famila</h4>
+    <form action="/auth_parent/" method="POST" >
+        {% csrf_token %}
+        <div class="control-group">
+            <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                <label>FOLIO</label>
+                <input type="text" name="folio" 
+                       class="form-control" 
+                       placeholder="Escribe tu Folio aquí." 
+                       maxlength="20">
+                <p class="help-block text-danger"></p>
+            </div>
+        </div>
+        <div style="text-align: right;margin:20px 0px;">
+            <button class="btn btn-warning btn-xl"  
+                    data-dismiss="modal">
+                Cancelar
+              </button>
+  
+            <button type="submit" 
+                    class="btn btn-primary btn-xl" 
+                    id="sendMessageButton">OK</button>        
+        </div>
+    </form>
+</section>
+
