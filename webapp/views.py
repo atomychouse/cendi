@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import (render, redirect, get_object_or_404)
 from django.views.generic.base import TemplateView
 from school.utils import (FormCreator)
 
@@ -42,6 +42,8 @@ class Home(TemplateView):
 
     def get(self, request):
         context = {}
+        if request.user.is_staff:
+            return redirect('parent')
         return render(request, 'webapp/index.html', context)
 
 class Inscribete(TemplateView,):
@@ -109,7 +111,9 @@ class AuthParent(TemplateView):
 
 
 class ParentHome(LoginRequiredMixin, TemplateView):
-    login_url = '/direccion/login/'
+    login_url = '/'
     def get(self, request):
         context = {}
+        parent = get_object_or_404(PadreTutor, folio=request.user.username) 
+        context['parent'] =  parent
         return render(request, 'webapp/parent.html', context)

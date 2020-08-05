@@ -1,1 +1,17 @@
-PARENT
+{% extends 'webapp/parent_base.html' %}
+
+{% block userinfo%}
+    <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{parent.parent_nombre}}</span>
+        </a>
+        <!-- Dropdown - User Information -->
+    </li>
+{% endblock %}
+
+
+
+
+{% block content %}
+    <h1 class="h3 mb-4 text-gray-800">Hola {{parent.parent_nombre}}</h1>
+{% endblock %}
