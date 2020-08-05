@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
@@ -99,10 +100,6 @@ class Inscripcion(TemplateView):
         context['form_tutor'] = form_tutor
         return render(request, 'direction/inscripcion.html', context)
 
-
-
-
-
 class AddTutor(TemplateView, Commonds):
     def post(self, request):
         context = {}
@@ -112,9 +109,13 @@ class AddTutor(TemplateView, Commonds):
         form = FORM.form_to_model(modelo=PadreTutor, excludes=[])
         form = form(data, instance=instanced)
         if form.is_valid():
+            user = User.objects.create_user(username=data['folio'],
+                                 email='%s@cendipiaget.com'%(data['folio']),
+                                 is_staff=True,
+                                 password=data['folio'])
             f = form.save()
             callbacks = ['activate_paso_dos',]
-            response = {'id':f.id, 'folio':f.folio, 'callbacks':callbacks}
+            response = {'id':f.id, 'folio':f.folio, 'userid':user.id,  'callbacks':callbacks}
             return JsonResponse(response)
         else:
             response = {'errors':form.errors.get_json_data()}

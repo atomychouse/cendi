@@ -79,7 +79,7 @@
                     <input type="hidden" name="id_parent" id="id_parent" value="parent.id">
                     <h4 class="tt">
                         Datos del padre o tutor
-                        <span id="parent_folio"></span>
+                        <span id="parent_folio">{{parent.folio}}</span>
                     </h4>
                     {{paso1.as_p}}
                     <div style="text-align: right;padding:20px 0px;">
@@ -99,7 +99,11 @@
                 <form id="form-paso-1" class="sendajax" action="/addalumno/" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="id_alumno" id="id_alumno" value="">
-                    <h4 class="tt">Datos del Alumno</h4>
+                    <input type="hidden" name="parenttutor" id="parenttutor" value="{{parent.id}}">
+                    <h4 class="tt">
+                        Datos del Alumno
+                        <span id="folio_alumno"></span>
+                    </h4>
                     {{paso2.as_p}}
                     <div style="text-align: right;padding:20px 0px;">
                         <a href="#" class="btn btn-success btn-icon-split form-btn">
@@ -116,7 +120,7 @@
 
           <div class="collapse " id="form-paso3">
             <div class="card card-body">
-                PASO 3
+                {% include 'webapp/pagos.html'%}
             </div>
           </div>
 

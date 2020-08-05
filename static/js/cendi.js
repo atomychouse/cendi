@@ -1,7 +1,14 @@
 function activate_paso_dos(folio,id){
     $('[href="#form-paso2"]').removeClass('disabled').click();
-    $('#parent_folio').html(folio);
-    $('#id_parent').val(id);
+    $('#parent_folio,#folio_pago').html(folio);
+    $('#id_parent,#parenttutor').val(id);
+}
+
+function activate_paso_tres(folio,id){
+    $('[href="#form-paso3"]').removeClass('disabled').click();
+    $('#folio_alumno').html(folio);
+    $('#id_alumno').val(id);
+
 }
 
 
