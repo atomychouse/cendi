@@ -6,14 +6,12 @@ admin.site.register(School)
 admin.site.register(Grado)
 admin.site.register(PadreTutor)
 
-
+'''
 class GrupoAdmin(admin.ModelAdmin):
     change_list_template = 'admin/grupo_list.html'
     list_display = ['name','grade','horario','alumnos']
-    '''
     def get_queryset(self, request):
         return super(GrupoAdmin,self).get_queryset(request).select_related('alumno')
-    '''
     def alumnos(self, obj):
         return obj.alumno_set.all().count()
     def changelist_view(self, request, extra_context=None):
@@ -74,8 +72,6 @@ class AlumnoAdmin(admin.ModelAdmin):
             pass
         return response
 
+'''
 
-
-admin.site.register(Alumno, AlumnoAdmin)
-admin.site.register(Grupo, GrupoAdmin)
 

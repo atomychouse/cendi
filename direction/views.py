@@ -1,14 +1,17 @@
+# -*- encoding: utf-8 -*-
+
 from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from direction.models import (Alumno, PadreTutor)
-from school.utils import (FormCreator)
+from school.utils import (FormCreator, Commonds)
 from django import forms
 
 FIELDS_ALUMNO = ['nombre', 'apaterno', 'amaterno', 'genero', 'curp', 'nacimiento', 'tipo_desangre', 'alergias']
 FIELDS_TUTOR = ['nombre_completo','edad','folio']
+FORM  = FormCreator()
 
 
 
@@ -95,3 +98,45 @@ class Inscripcion(TemplateView):
         context['form_alumno'] = form_alumno
         context['form_tutor'] = form_tutor
         return render(request, 'direction/inscripcion.html', context)
+
+
+
+
+
+class AddTutor(TemplateView, Commonds):
+    def post(self, request):
+        context = {}
+        data = request.POST.copy()
+        data['folio'] = self.gen_folio()
+        instanced = None
+        form = FORM.form_to_model(modelo=PadreTutor, excludes=[])
+        form = form(data, instance=instanced)
+        if form.is_valid():
+            f = form.save()
+            callbacks = ['activate_paso_dos',]
+            response = {'id':f.id, 'folio':f.folio, 'callbacks':callbacks}
+            return JsonResponse(response)
+        else:
+            response = {'errors':form.errors.get_json_data()}
+            return JsonResponse(response)
+
+
+
+class AddAlumno(TemplateView, Commonds):
+    def post(self, request):
+        context = {}
+        data = request.POST.copy()
+        data['folio'] = self.gen_folio()
+        instanced = None
+        form = FORM.form_to_model(modelo=Alumno, excludes=[])
+        form = form(data, instance=instanced)
+        if form.is_valid():
+            f = form.save()
+            f.foto = request.FILES.get('foto')
+            f.save()
+            callbacks = ['activate_paso_tres',]
+            response = {'id':f.id, 'folio':f.folio, 'callbacks':callbacks}
+            return JsonResponse(response)
+        else:
+            response = {'errors':form.errors.get_json_data()}
+            return JsonResponse(response)

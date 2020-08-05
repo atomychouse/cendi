@@ -2,6 +2,7 @@
 
 from django.forms import ModelForm
 from django import forms
+from datetime import datetime
 
 
 class FormCreator:
@@ -12,3 +13,18 @@ class FormCreator:
                     "model": modelo, 'fields': fields, 'widgets': widgets, 'exclude': excludes})
         KtemodelfomrKlss = type('modelform', (ModelForm,), {"Meta": meta})
         return KtemodelfomrKlss
+
+
+class Commonds:
+
+    def gen_folio(self):
+        d = datetime.now()
+        folio = '%s%s%s%s%s%s'%(str(d.year)[:2], 
+                                d.month, 
+                                d.day, 
+                                d.hour, 
+                                d.minute, 
+                                d.second)
+        folio = int(folio)
+        folio = hex(folio).upper()
+        return folio
