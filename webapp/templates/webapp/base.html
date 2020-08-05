@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB Admin 2 - Dashboard</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-laugh-wink"></i>
+                CENDI Jean Piaget
+            </a>
+        <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <ul class="navbar-nav ml-auto">
+              
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Inscripción</h1>
+          </div>
+
+          <ul id="pasos" class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#form-paso1">Paso 1</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if parent%} enabled {% else %}disabled{% endif %}" href="#form-paso2">Paso 2</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#form-paso3">Paso 3</a>
+            </li>
+          </ul>
+          
+        <section id="collapse-pasos">
+          <div class="collapse show" id="form-paso1">
+            <div class="card card-body">
+                <form id="form-paso-1" class="sendajax" action="/addtutor/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id_parent" id="id_parent" value="parent.id">
+                    <h4 class="tt">
+                        Datos del padre o tutor
+                        <span id="parent_folio"></span>
+                    </h4>
+                    {{paso1.as_p}}
+                    <div style="text-align: right;padding:20px 0px;">
+                        <a href="#" class="btn btn-success btn-icon-split form-btn">
+                            <span class="icon text-white-50">
+                            <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">Guardar</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+          </div>
+
+          <div class="collapse " id="form-paso2">
+            <div class="card card-body">
+                <form id="form-paso-1" class="sendajax" action="/addalumno/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id_alumno" id="id_alumno" value="">
+                    <h4 class="tt">Datos del Alumno</h4>
+                    {{paso2.as_p}}
+                    <div style="text-align: right;padding:20px 0px;">
+                        <a href="#" class="btn btn-success btn-icon-split form-btn">
+                            <span class="icon text-white-50">
+                            <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">Finalizar</span>
+                        </a>
+                    </div>
+                </form>
+            </div>
+          </div>
+
+
+          <div class="collapse " id="form-paso3">
+            <div class="card card-body">
+                PASO 3
+            </div>
+          </div>
+
+        </section>
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer ">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Cendi Jean Piaget 2020</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+ 
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/static/js/sb-admin-2.min.js"></script>
+  <script src="/static/js/cendi.js"></script>
+
+
+</body>
+
+</html>
