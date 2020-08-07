@@ -14,8 +14,6 @@ FIELDS_ALUMNO = ['nombre', 'apaterno', 'amaterno', 'genero', 'curp', 'nacimiento
 FIELDS_TUTOR = ['nombre_completo','edad','folio']
 FORM  = FormCreator()
 
-
-
 #class Home(LoginRequiredMixin, TemplateView):
 class Home(TemplateView):
     #login_url = '/direccion/login/'
@@ -104,24 +102,28 @@ class AddTutor(TemplateView, Commonds):
     def post(self, request):
         context = {}
         data = request.POST.copy()
-        data['folio'] = self.gen_folio()
         instanced = None
+        try:
+            idp = request.POST.get('id_parent')
+            instanced = PadreTutor.objects.get(pk=idp)
+            data['folio'] = instanced.folio
+        except:
+            data['folio'] = self.gen_folio()
         form = FORM.form_to_model(modelo=PadreTutor, excludes=[])
         form = form(data, instance=instanced)
         if form.is_valid():
-            user = User.objects.create_user(username=data['folio'],
+            if not instanced:
+                user = User.objects.create_user(username=data['folio'],
                                  email='%s@cendipiaget.com'%(data['folio']),
                                  is_staff=True,
                                  password=data['folio'])
             f = form.save()
             callbacks = ['activate_paso_dos',]
-            response = {'id':f.id, 'folio':f.folio, 'userid':user.id,  'callbacks':callbacks}
+            response = {'id':f.id, 'folio':f.folio, 'callbacks':callbacks}
             return JsonResponse(response)
         else:
             response = {'errors':form.errors.get_json_data()}
             return JsonResponse(response)
-
-
 
 class AddAlumno(TemplateView, Commonds):
     def post(self, request):

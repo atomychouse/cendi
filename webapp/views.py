@@ -3,7 +3,7 @@
 from direction.models import (Alumno, PadreTutor)
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import (render, redirect, get_object_or_404)
@@ -54,7 +54,6 @@ class Inscribete(TemplateView,):
         instanced = None
         if folio: 
             instanced = PadreTutor.objects.get(folio=folio)
-        
         context = {}
         widgets_paso1 = {
         'parent_nacimiento': forms.TextInput(attrs={'type':'date',
@@ -75,7 +74,7 @@ class Inscribete(TemplateView,):
                                               widgets=widgets_paso1 
                                               )
         form_paso_dos = self.general_form.form_to_model(modelo=Alumno, 
-                                              excludes=['folio', 'parenttutor'],
+                                              excludes=['folio', 'parenttutor','eliminado'],
                                               widgets=widgets_paso2
                                               )
         for f in form_paso_uno.base_fields:
@@ -111,9 +110,83 @@ class AuthParent(TemplateView):
 
 
 class ParentHome(LoginRequiredMixin, TemplateView):
+    general_form  = FormCreator()
     login_url = '/'
     def get(self, request):
         context = {}
+        widgets_paso2 = {
+        'nacimiento': forms.TextInput(attrs={
+            'type':'date',
+            'class':'form-control form-control-user'
+            }),
+        }
+
+        parent = get_object_or_404(PadreTutor, folio=request.user.username) 
+        form_paso_dos = self.general_form.form_to_model(modelo=Alumno, 
+                                              excludes=['folio', 'parenttutor', 'eliminado'],
+                                              widgets=widgets_paso2
+                                              )
+        for f in form_paso_dos.base_fields:
+            form_paso_dos.base_fields.get(f).widget.attrs={'class':'form-control form-control-user',
+            }
+        form_paso_dos.base_fields.get('curp').widget.attrs={
+            'class':'form-control form-control-user curp',
+            'id':'alumno_curp',
+            'maxlength':'18'
+            }
+        context['paso2'] = form_paso_dos
+        context['parent'] =  parent
+        context['alumnos'] = parent.alumno_set.filter(eliminado=False)
+        return render(request, 'webapp/parent.html', context)
+
+class ParentPagos(LoginRequiredMixin, TemplateView):
+    login_url = '/'
+    def get(self, request):
+        pagos = [
+            {
+                'pk':100,
+                'name':u'Inscripción',
+                'monto':'1200',
+                'status':0,
+                'start':'',
+                'limite_pago':'24/10/2020'
+            }
+        ]
+
+        for x in range(1,10):
+            pago = {
+                'pk':x,
+                'name':u'Colegiatura %s'%(x),
+                'monto':'800',
+                'status':x,
+                'start':'',
+                'limite_pago':'24/%s/2020'%(x)
+            }
+            pagos.append(pago)
+
+        context = {}
         parent = get_object_or_404(PadreTutor, folio=request.user.username) 
         context['parent'] =  parent
-        return render(request, 'webapp/parent.html', context)
+        context['pagos'] = pagos
+        return render(request, 'webapp/parent_pagos.html', context)
+
+
+class rmAlumno(TemplateView):
+    def get(self, request, folio):
+        context = {}
+        try:
+            a = Alumno.objects.get(folio=folio)
+            a.eliminado = True
+            a.save()
+        except:
+            pass
+        return redirect('/')
+
+
+class Logout(TemplateView):
+    def get(self, request):
+        logout(request)
+        context = {}
+        return redirect('/')
+
+

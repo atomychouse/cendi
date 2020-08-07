@@ -36,6 +36,7 @@ class PadreTutor(models.Model):
     dateadd = models.DateField(auto_now_add=True)
 
 class Alumno(models.Model):
+    eliminado = models.BooleanField(default=False)
     foto = models.ImageField(upload_to='static/pupils/', blank=True, null=True)
     apaterno = models.CharField(u'Apellido Paterno', max_length=200)
     amaterno = models.CharField(u'Apellido Materno',max_length=200,default="")

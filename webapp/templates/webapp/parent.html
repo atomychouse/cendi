@@ -14,4 +14,72 @@
 
 {% block content %}
     <h1 class="h3 mb-4 text-gray-800">Hola {{parent.parent_nombre}}</h1>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Alumnos</a>
+          <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Registrar +</a>
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <br>
+            {% ifequal alumnos|length 0%}
+                Aun no haz hecho ningun registro 
+            {% endifequal %}
+            {% for a in alumnos %}
+
+            <div class="card shadow mb-4 inlide-card alumno-card">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary inlide-card">{{a.folio}}</h6>
+                    <a class="nav-link inlide-card" href="#" >
+                        <i class="fas fa-bell fa-fw"></i>
+                        <!-- Counter - Alerts -->
+                        <span class="badge badge-danger badge-counter">3+</span>
+                    </a>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body foto-alumno">
+                    <img src="/{{a.foto.url}}" >
+                    <hr>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{a.apaterno}}<br> {{a.amaterno}}<br> {{a.nombre}}</div>
+              </div>
+              <div class="card-header py-3" style="text-align: right;">
+                <h6 class="m-0 font-weight-bold text-primary inlide-card">
+                    Eliminar
+                </h6>
+                <a class="nav-link inlide-card remove" href="/delete/{{a.folio}}" >
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <br>
+            <form id="form-paso-2" class="sendajax" action="/addalumno/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id_alumno" id="id_alumno" value="">
+                <input type="hidden" name="parenttutor" id="parenttutor" value="{{parent.id}}">
+                <h4 class="tt">
+                    Datos del Alumno
+                    <span id="folio_alumno"></span>
+                </h4>
+                <div class="media hiden">
+                    <img id="pre-foto" class="mr-3 img-thumbnail" src="" alt="FOTO" style="width: 20vw;">
+                </div> 
+                <hr>                   
+                {{paso2.as_p}}
+                <div style="text-align: right;padding:20px 0px;">
+                    <a href="#" class="btn btn-success btn-icon-split form-btn">
+                        <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"></i>
+                        </span>
+                        <span class="text">Finalizar</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+      </div>
 {% endblock %}
