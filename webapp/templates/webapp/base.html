@@ -2,37 +2,25 @@
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
   <title>CENDI</title>
-
   <!-- Custom fonts for this template-->
   <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
   <!-- Custom styles for this template-->
   <link href="/static/css/sb-admin-2.css" rel="stylesheet">
-
 </head>
-
 <body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
-
-
-
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
       <!-- Main Content -->
       <div id="content">
-
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
             <a class="navbar-brand" href="#">
@@ -43,22 +31,16 @@
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
           </button>
-
           <ul class="navbar-nav ml-auto">
-              
           </ul>
-
         </nav>
         <!-- End of Topbar -->
-
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Inscripción</h1>
           </div>
-
           <ul id="pasos" class="nav nav-tabs">
             <li class="nav-item">
               <a class="nav-link active" href="#form-paso1">Paso 1</a>
@@ -70,13 +52,12 @@
               <a class="nav-link disabled" href="#form-paso3">Paso 3</a>
             </li>
           </ul>
-          
         <section id="collapse-pasos">
           <div class="collapse show" id="form-paso1">
             <div class="card card-body">
                 <form id="form-paso-1" class="sendajax" action="/addtutor/" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="id_parent" id="id_parent" value="parent.id">
+                    <input type="hidden" name="id_parent" id="id_parent" value="{{parent.id}}">
                     <h4 class="tt">
                         Datos del padre o tutor
                         <span id="parent_folio">{{parent.folio}}</span>
@@ -96,7 +77,7 @@
 
           <div class="collapse " id="form-paso2">
             <div class="card card-body">
-                <form id="form-paso-1" class="sendajax" action="/addalumno/" method="post">
+                <form id="form-paso-2" class="sendajax" action="/addalumno/" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="id_alumno" id="id_alumno" value="">
                     <input type="hidden" name="parenttutor" id="parenttutor" value="{{parent.id}}">
@@ -104,6 +85,10 @@
                         Datos del Alumno
                         <span id="folio_alumno"></span>
                     </h4>
+                    <div class="media hiden">
+                      <img id="pre-foto" class="mr-3 img-thumbnail" src="" alt="FOTO" style="width: 20vw;">
+                    </div> 
+                    <hr>                   
                     {{paso2.as_p}}
                     <div style="text-align: right;padding:20px 0px;">
                         <a href="#" class="btn btn-success btn-icon-split form-btn">

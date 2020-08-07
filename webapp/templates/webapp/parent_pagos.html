@@ -1,0 +1,66 @@
+{% extends 'webapp/parent_base.html' %}
+
+{% block userinfo%}
+    <li class="nav-item dropdown no-arrow">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{parent.parent_nombre}}</span>
+        </a>
+        <!-- Dropdown - User Information -->
+    </li>
+{% endblock %}
+
+
+
+
+{% block content %}
+    <h1 class="h3 mb-4 text-gray-800">Hola {{parent.parent_nombre}}</h1>
+    <div id="accordion">
+        {% for p in pagos %}
+            <div class="card">
+                <div class="card-header {% if p.status < 5 %}alert alert-danger {% endif %}" id="headingOne">
+                    <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#pago{{p.pk}}" aria-expanded="true" aria-controls="pago{{p.pk}}">
+                        {{p.name}}
+                    </button>
+                    </h5>
+                </div>
+            
+                <div id="pago{{p.pk}}" class="collapse " aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                              <div class="row no-gutters align-items-center">
+                                <div class="col mr-2 ">
+                                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Monto (MNX) </div>
+                                  <ul class="nav">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" href="#">Registrar Pago</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="#">Reportar</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" href="#">Formas de pago</a>
+                                    </li>
+                                  </ul>
+                                  <hr>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                      ${{p.monto}}
+                                      | pagar antes de {{p.limite_pago}}
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                  <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+      </div>
+{% endblock %}
