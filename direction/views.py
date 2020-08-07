@@ -135,8 +135,11 @@ class AddAlumno(TemplateView, Commonds):
         form = form(data, instance=instanced)
         if form.is_valid():
             f = form.save()
-            f.foto = request.FILES.get('foto')
-            f.save()
+            try:
+                f.foto = request.FILES.get('foto')
+                f.save()
+            except:
+                pass
             callbacks = ['activate_paso_tres',]
             response = {'id':f.id, 'folio':f.folio, 'callbacks':callbacks}
             return JsonResponse(response)
